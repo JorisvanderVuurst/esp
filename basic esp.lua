@@ -1,12 +1,11 @@
--- Roblox ESP Cheat with white outlines and green filling
--- This script creates an outline around player characters
+
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
--- ESP Configuration
+
 local ESP = {
     Enabled = true,
     OutlineColor = Color3.new(1, 1, 1), -- White outline
@@ -16,12 +15,12 @@ local ESP = {
     TeamCheck = false -- Set to true if you want to exclude teammates
 }
 
--- Create ESP container
+
 local ESPContainer = Instance.new("Folder")
 ESPContainer.Name = "ESPContainer"
 ESPContainer.Parent = game.CoreGui
 
--- Function to create ESP for a player
+
 local function CreateESP(player)
     if player == LocalPlayer then return end
     
@@ -29,7 +28,7 @@ local function CreateESP(player)
     espFolder.Name = player.Name .. "_ESP"
     espFolder.Parent = ESPContainer
     
-    -- Create highlight effect (outline around character)
+    
     local highlight = Instance.new("Highlight")
     highlight.Name = "PlayerHighlight"
     highlight.FillColor = ESP.FillColor
@@ -37,8 +36,8 @@ local function CreateESP(player)
     highlight.FillTransparency = ESP.Transparency
     highlight.OutlineTransparency = 0
     highlight.Parent = espFolder
+
     
-    -- Update ESP
     local function UpdateESP()
         if not ESP.Enabled then
             highlight.Enabled = false
@@ -57,21 +56,21 @@ local function CreateESP(player)
             return
         end
         
-        -- Team check
+       
         if ESP.TeamCheck and player.Team == LocalPlayer.Team then
             highlight.Enabled = false
             return
         end
         
-        -- Update the highlight's parent to the character
+        
         highlight.Enabled = true
         highlight.Adornee = character
     end
     
-    -- Connect update function
+   
     local connection = RunService.RenderStepped:Connect(UpdateESP)
     
-    -- Clean up when player leaves
+   
     player.AncestryChanged:Connect(function(_, parent)
         if parent == nil then
             espFolder:Destroy()
@@ -80,14 +79,14 @@ local function CreateESP(player)
     end)
 end
 
--- Initialize ESP for existing players
+
 for _, player in ipairs(Players:GetPlayers()) do
     if player ~= LocalPlayer then
         CreateESP(player)
     end
 end
 
--- Set up ESP for players who join later
+
 Players.PlayerAdded:Connect(CreateESP)
 
 -- Toggle ESP function (you can bind this to a key)
